@@ -27,6 +27,8 @@ app = Flask(__name__)
 def xtra():
     return render_template('index.html')
 
+    #https://internet.sefaz.es.gov.br/informacoes/combustivel/index.php
+
 
 @app.route('/converter')
 def converter():
