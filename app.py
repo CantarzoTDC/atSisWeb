@@ -1,5 +1,4 @@
-from crypt import methods
-from flask import Flask, render_template, request, get_flashed_messages
+from flask import Flask, render_template, request
 import requests
 import json
 
@@ -12,20 +11,22 @@ B) Faça um webapp que calcule o custo de uma viagem baseado nos seguintes dados
     3 - Preço do combustivel
 
         -- Etapas:
-        1- Formar dupla
-        2- Repositório GHub
-        3- Consumo da API
-        4 -Frontend
-        5- Backend
-        6- Testes
-        7- Commit no Repositório
+        1- Formar dupla [?]
+        2- Repositório GHub [https://github.com/CantarzoTDC/atSisWeb]
+        3- Consumo da API [?]
+        4 -Frontend [?]
+        5- Backend [?]
+        6- Testes [?]
+        7- Commit no Repositório [v]
 '''
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def xtra():
     return render_template('index.html')
+
 
 @app.route('/converter')
 def converter():
@@ -52,20 +53,38 @@ def converter():
             resultado = {}
     return render_template('converter.html', resultado=resultado)
 
-@app.route('/tripData/data/', methods="[POST]""[GET]")
-def consumeData():
 
+@app.route('/tripData/data/')
+def consumeData():
+    distJ,priceJ,perfJ  = requests.get('')
+    dist = float(distJ.json()['USDBRL']['high'])
+    price = float(priceJ.json()['USDBRL']['high'])
+    perf = float(perfJ.json()['USDBRL']['high'])
+    toConvert = request.args.get('valor')
+    resultado = {}
+    if toConvert:
+        try:
+            toConvert = float(toConvert)
+            converted = round(toConvert*value,2)
+            converted = str(converted).replace('.',',')
+            resultado = {
+                'valor_original':toConvert,
+                'valor_convertido':converted,
+                'dolar_diario':value
+            }
+        except ValueError:
+            resultado = {}
     return render_template('tripCalc.html',''' data=data''')
 
-@app.route('/tripData/calc/', methods="[POST]")
+
+@app.route('/tripData/calc/')
 def calcData():
     return render_template('tripCalc.html', '''data=data''')
 
-@app.route('/tripData/res/', methods="[POST]")
+
+@app.route('/tripData/res/')
 def distRes():
     return render_template('tripCalc.html', '''data=data''')
 
-
-
-
-app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True)
